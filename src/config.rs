@@ -67,6 +67,10 @@ impl MusicBrainzClient {
     ) -> Result<Response, Error> {
         use wasm_timer::Delay;
         let mut retries = *HTTP_RETRIES.0.lock().unwrap();
+
+        #[cfg(feature = "rate_limit")]
+        super::rate_limit::wait_for_ratelimit().await;
+
         loop {
             let request = request.try_clone().unwrap();
             let response = request.send().await?;
@@ -116,7 +120,7 @@ fn init_http_retries() -> MusicBrainzRetries {
 ///
 /// ## Example
 /// ```rust
-/// musicbrainz_rs::config::set_user_agent("MyAwesomeTagger/1.2.0 ( http://myawesometagger.example.com )");
+/// musicbrainz_rs_nova::config::set_user_agent("MyAwesomeTagger/1.2.0 ( http://myawesometagger.example.com )");
 /// ```
 pub fn set_user_agent(user_agent: &'static str) {
     let client_ref = Arc::clone(&HTTP_CLIENT.0);

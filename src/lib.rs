@@ -10,8 +10,8 @@
 //! The most simple usage would be to lookup an entity, knowing its [Musicbrainz ID](https://musicbrainz.org/doc/MusicBrainz_Identifier).
 //!
 //!  ```rust
-//! use musicbrainz_rs::entity::artist::Artist;
-//! use musicbrainz_rs::prelude::*;
+//! use musicbrainz_rs_nova::entity::artist::Artist;
+//! use musicbrainz_rs_nova::prelude::*;
 //!
 //! # #[cfg(feature = "async")]
 //! #[tokio::main]
@@ -56,6 +56,14 @@ pub mod entity;
 /// Brings trait and type needed to perform any API query in scope
 pub mod prelude;
 
+/// Crate errors;
+pub mod error;
+
+/// Utilities for the rate_limiting
+#[cfg(feature = "rate_limit")]
+pub(crate) mod rate_limit;
+
+use crate::entity::api::MusicbrainzResult;
 use crate::entity::search::{SearchResult, Searchable};
 use deserialization::date_format;
 use entity::Browsable;
@@ -64,8 +72,8 @@ use entity::Include;
 use entity::{CoverartResolution, CoverartResponse, CoverartTarget, CoverartType};
 use std::fmt::Write as _;
 
-/// Type alias for [reqwest::Error]
-pub type Error = reqwest::Error;
+/// Rexports
+pub use crate::error::Error;
 
 #[derive(Clone, Debug)]
 struct Query<T> {
@@ -82,11 +90,11 @@ struct Query<T> {
 ///
 /// ## EXample
 /// ```rust
-/// # use musicbrainz_rs::prelude::*;
+/// # use musicbrainz_rs_nova::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::Artist;
+/// # use musicbrainz_rs_nova::entity::artist::Artist;
 /// let nirvana = Artist::fetch()
 ///         .id("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
 ///         .execute()
@@ -97,7 +105,7 @@ struct Query<T> {
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::Artist;
+/// # use musicbrainz_rs_nova::entity::artist::Artist;
 /// let nirvana = Artist::fetch()
 ///         .id("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
 ///         .execute();
@@ -117,12 +125,12 @@ pub struct FetchQuery<T>(Query<T>);
 ///
 /// ## Example
 /// ```rust
-/// # use musicbrainz_rs::prelude::*;
+/// # use musicbrainz_rs_nova::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::release::Release;
-/// # use musicbrainz_rs::entity::CoverartResponse;
+/// # use musicbrainz_rs_nova::entity::release::Release;
+/// # use musicbrainz_rs_nova::entity::CoverartResponse;
 /// let in_utero_coverart = Release::fetch_coverart()
 ///         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")
 ///         .execute()
@@ -138,8 +146,8 @@ pub struct FetchQuery<T>(Query<T>);
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::release::Release;
-/// # use musicbrainz_rs::entity::CoverartResponse;
+/// # use musicbrainz_rs_nova::entity::release::Release;
+/// # use musicbrainz_rs_nova::entity::CoverartResponse;
 /// let in_utero_coverart = Release::fetch_coverart()
 ///         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")
 ///         .execute()?;
@@ -172,12 +180,12 @@ pub struct FetchCoverartQuery<T>(CoverartQuery<T>);
 ///
 /// ## Example
 /// ```rust
-/// # use musicbrainz_rs::prelude::*;
+/// # use musicbrainz_rs_nova::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::Artist;
-/// # use musicbrainz_rs::entity::release::Release;
+/// # use musicbrainz_rs_nova::entity::artist::Artist;
+/// # use musicbrainz_rs_nova::entity::release::Release;
 /// let ubiktune_releases = Release::browse()
 ///         .by_label("47e718e1-7ee4-460c-b1cc-1192a841c6e5")
 ///         .execute()
@@ -188,8 +196,8 @@ pub struct FetchCoverartQuery<T>(CoverartQuery<T>);
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::Artist;
-/// # use musicbrainz_rs::entity::release::Release;
+/// # use musicbrainz_rs_nova::entity::artist::Artist;
+/// # use musicbrainz_rs_nova::entity::release::Release;
 /// let ubiktune_releases = Release::browse()
 ///         .by_label("47e718e1-7ee4-460c-b1cc-1192a841c6e5")
 ///         .execute();
@@ -215,11 +223,11 @@ pub struct BrowseQuery<T> {
 /// ## Example
 ///
 ///```rust
-/// # use musicbrainz_rs::prelude::*;
+/// # use musicbrainz_rs_nova::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::{Artist, ArtistSearchQuery};
+/// # use musicbrainz_rs_nova::entity::artist::{Artist, ArtistSearchQuery};
 /// let query = ArtistSearchQuery::query_builder()
 ///         .artist("Miles Davis")
 ///         .and()
@@ -239,7 +247,7 @@ pub struct BrowseQuery<T> {
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs::entity::artist::{Artist, ArtistSearchQuery};
+/// # use musicbrainz_rs_nova::entity::artist::{Artist, ArtistSearchQuery};
 /// let query = ArtistSearchQuery::query_builder()
 ///         .artist("Miles Davis")
 ///         .and()
@@ -259,7 +267,11 @@ pub struct BrowseQuery<T> {
 /// # }
 /// ```
 #[derive(Clone, Debug)]
-pub struct SearchQuery<T>(Query<T>);
+pub struct SearchQuery<T> {
+    inner: Query<T>,
+    offset: Option<u16>,
+    limit: Option<u8>,
+}
 
 impl<'a, T> FetchQuery<T>
 where
@@ -275,10 +287,16 @@ where
     where
         T: Fetch<'a> + DeserializeOwned,
     {
+        use entity::api::MusicbrainzResult;
+
         self.0.path.push_str(FMT_JSON);
         self.include_to_path();
         let request = HTTP_CLIENT.get(&self.0.path);
-        HTTP_CLIENT.send_with_retries(request)?.json()
+
+        HTTP_CLIENT
+            .send_with_retries(request)?
+            .json::<MusicbrainzResult<T>>()?
+            .into_result(self.0.path.clone())
     }
 
     #[cfg(feature = "async")]
@@ -289,7 +307,13 @@ where
         self.0.path.push_str(FMT_JSON);
         self.include_to_path();
         let request = HTTP_CLIENT.get(&self.0.path);
-        HTTP_CLIENT.send_with_retries(request).await?.json().await
+
+        HTTP_CLIENT
+            .send_with_retries(request)
+            .await?
+            .json::<MusicbrainzResult<T>>()
+            .await?
+            .into_result(self.0.path.clone())
     }
 
     fn include_to_path(&mut self) {
@@ -368,7 +392,7 @@ where
             let url = response.url().clone();
             CoverartResponse::Url(url.to_string())
         } else {
-            CoverartResponse::Json(response.json().unwrap())
+            CoverartResponse::Json(response.json()?)
         };
         Ok(coverart_response)
     }
@@ -382,7 +406,7 @@ where
             let url = response.url().clone();
             CoverartResponse::Url(url.to_string())
         } else {
-            CoverartResponse::Json(response.json().await.unwrap())
+            CoverartResponse::Json(response.json().await?)
         };
         Ok(coverart_response)
     }
@@ -399,7 +423,11 @@ where
     {
         self.include_to_path();
         let request = HTTP_CLIENT.get(&self.inner.path);
-        HTTP_CLIENT.send_with_retries(request)?.json()
+
+        HTTP_CLIENT
+            .send_with_retries(request)?
+            .json::<MusicbrainzResult<BrowseResult<T>>>()?
+            .into_result(self.inner.path.clone())
     }
 
     #[cfg(feature = "async")]
@@ -409,7 +437,13 @@ where
     {
         self.include_to_path();
         let request = HTTP_CLIENT.get(&self.inner.path);
-        HTTP_CLIENT.send_with_retries(request).await?.json().await
+
+        HTTP_CLIENT
+            .send_with_retries(request)
+            .await?
+            .json::<MusicbrainzResult<BrowseResult<T>>>()
+            .await?
+            .into_result(self.inner.path.clone())
     }
 
     fn include_to_path(&mut self) {
@@ -445,8 +479,12 @@ where
         T: Search<'a> + DeserializeOwned + Searchable,
     {
         self.include_to_path();
-        let request = HTTP_CLIENT.get(&self.0.path);
-        HTTP_CLIENT.send_with_retries(request)?.json()
+        let request = HTTP_CLIENT.get(&self.inner.path);
+
+        HTTP_CLIENT
+            .send_with_retries(request)?
+            .json::<MusicbrainzResult<SearchResult<T>>>()?
+            .into_result(self.inner.path.clone())
     }
 
     #[cfg(feature = "async")]
@@ -455,12 +493,40 @@ where
         T: Search<'a> + DeserializeOwned + Searchable,
     {
         self.include_to_path();
-        let request = HTTP_CLIENT.get(&self.0.path);
-        HTTP_CLIENT.send_with_retries(request).await?.json().await
+        let request = HTTP_CLIENT.get(&self.inner.path);
+
+        HTTP_CLIENT
+            .send_with_retries(request)
+            .await?
+            .json::<MusicbrainzResult<SearchResult<T>>>()
+            .await?
+            .into_result(self.inner.path.clone())
     }
 
     fn include_to_path(&mut self) {
-        self.0.include_to_path()
+        self.inner.include_to_path();
+
+        if let Some(limit) = self.limit {
+            self.inner.path.push_str(PARAM_LIMIT);
+            self.inner.path.push_str(&limit.to_string());
+        }
+
+        if let Some(offset) = self.offset {
+            self.inner.path.push_str(PARAM_OFFSET);
+            self.inner.path.push_str(&offset.to_string());
+        }
+    }
+
+    /// An integer value defining how many entries should be returned. Only values between 1 and 100 (both inclusive) are allowed. If not given, this defaults to 25.
+    pub fn limit(&mut self, limit: u8) -> &mut Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    /// Return search results starting at a given offset. Used for paging through more than one page of results.
+    pub fn offset(&mut self, offset: u16) -> &mut Self {
+        self.offset = Some(offset);
+        self
     }
 }
 
@@ -559,10 +625,14 @@ pub trait Search<'a> {
     where
         Self: Sized + Path<'a>,
     {
-        SearchQuery(Query {
-            path: format!("{}/{}{}&{}", BASE_URL, Self::path(), FMT_JSON, query),
-            phantom: PhantomData,
-            include: vec![],
-        })
+        SearchQuery {
+            inner: Query {
+                path: format!("{}/{}{}&{}", BASE_URL, Self::path(), FMT_JSON, query),
+                phantom: PhantomData,
+                include: vec![],
+            },
+            limit: None,
+            offset: None,
+        }
     }
 }

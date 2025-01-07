@@ -1,5 +1,5 @@
-use musicbrainz_rs::entity::artist::*;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::artist::*;
+use musicbrainz_rs_nova::prelude::*;
 
 #[test]
 fn should_get_artist_releases() {
@@ -199,7 +199,7 @@ fn should_get_artist_tags() {
         .tags
         .unwrap()
         .iter()
-        .any(|tag| tag.name == "chicago blues"));
+        .any(|tag| tag.name == "detroit blues"));
 }
 
 #[test]

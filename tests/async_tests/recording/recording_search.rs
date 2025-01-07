@@ -1,7 +1,8 @@
-use musicbrainz_rs::entity::recording::*;
-use musicbrainz_rs::Search;
+use musicbrainz_rs_nova::entity::recording::*;
+use musicbrainz_rs_nova::Search;
 
 #[tokio::test]
+#[serial_test::serial]
 async fn should_search_recording() {
     let query = RecordingSearchQuery::query_builder()
         .recording("basket case")

@@ -1,7 +1,8 @@
-use musicbrainz_rs::entity::event::*;
-use musicbrainz_rs::Search;
+use musicbrainz_rs_nova::entity::event::*;
+use musicbrainz_rs_nova::Search;
 
 #[tokio::test]
+#[serial_test::serial]
 async fn should_search_event() {
     let query = EventSearchQuery::query_builder()
         .event("kiss at huntington center")

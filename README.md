@@ -1,33 +1,46 @@
 # ![MusicBrainz] Rust &emsp;
 
-[![Latest Version]][crates.io] [![Build Status]][Action] [![codecov](https://codecov.io/gh/oknozor/musicbrainz_rs/branch/master/graph/badge.svg)](https://codecov.io/gh/oknozor/musicbrainz_rs) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/oknozor/musicbrainz_rs) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![License](https://img.shields.io/github/license/oknozor/musicbrainz_rs)
+[![Latest Version]][crates.io] [![Build Status]][Action] [![codecov](https://codecov.io/gh/oknozor/musicbrainz_rs/branch/master/graph/badge.svg)](https://codecov.io/gh/oknozor/musicbrainz_rs) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/RustyNova016/musicbrainz_rs) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![License](https://img.shields.io/github/license/RustyNova016/musicbrainz_rs)
 
-[Build Status]: https://github.com/oknozor/musicbrainz_rs/actions/workflows/CI.yaml/badge.svg
-[Action]: https://github.com/oknozor/musicbrainz_rs/actions/workflows/CI.yaml
-[Latest Version]: https://img.shields.io/crates/v/musicbrainz_rs.svg
-[crates.io]: https://www.crates.io/crates/musicbrainz_rs
-[MusicBrainz]: https://staticbrainz.org/MB/header-logo-791fb3f.svg
+[Build Status]: https://github.com/RustyNova016/musicbrainz_rs/actions/workflows/rust_check.yaml/badge.svg
+[Action]: https://github.com/RustyNova016/musicbrainz_rs/actions/workflows/rust_check.yaml
+[Latest Version]: https://img.shields.io/crates/v/musicbrainz_rs_nova.svg
+[crates.io]: https://www.crates.io/crates/musicbrainz_rs_nova
+[MusicBrainz]: https://static.metabrainz.org/MB/header-logo-1f7dc2a.svg
 
 **MusicBrainz rust is a utility crate for the the [MusicBrainz API](https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2).**
+
+>This is a fork of [musicbrainz_rs](https://github.com/oknozor/musicbrainz_rs) crate, as it is currently seemingly unmaintained. While this crate is mostly meant as a temporary fix for [another project](https://github.com/RustyNova016/listenbrainz-cli-tools), this crate can be used instead of the original.
+>
+>This is meant to be a drop-in replacement, but may require some tweaks in some cases. Don't forget to test the switch.
 
 ---
 
 you may be looking for :
-- [Api documention](https://docs.rs/musicbrainz_rs)
-- [The crate](https://www.crates.io/crates/musicbrainz_rs)
+
+- [Api documention](https://docs.rs/musicbrainz_rs_nova)
+- [The crate](https://crates.io/crates/musicbrainz_rs_nova)
 
 ## Usage
 
-You can choose to use either the default async client or a blocking one. 
+You can choose to use either the default async client or a blocking one.
 
 **async client:**
+
 ```toml
-musicbrainz_rs = "0.5.0"
+musicbrainz_rs_nova = "0.8.0"
 ```
 
 **blocking client:**
+
 ```toml
-musicbrainz_rs = { version = "0.5.0", features = ["blocking] }
+musicbrainz_rs_nova = { version = "0.8.0", default-features = false, features = ["blocking"] }
+```
+
+**If it's a migration from musicbrainz_rs:**
+
+```toml
+musicbrainz_rs = {version = "0.8.0", package = "musicbrainz_rs_nova"}
 ```
 
 ## Features
@@ -40,9 +53,9 @@ To perform a [lookups](https://musicbrainz.org/doc/Development/XML_Web_Service/V
 you need to import the `Fetch` trait. This can be done using `musicbrainz_rs::prelude`
 
 ```rust
-use musicbrainz_rs::entity::artist;
-use musicbrainz_rs::entity::artist::*;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::artist;
+use musicbrainz_rs_nova::entity::artist::*;
+use musicbrainz_rs_nova::prelude::*;
 
 fn main() {
     let nirvana = Artist::fetch()
@@ -60,8 +73,8 @@ You can also use includes to get more detail about a resource :
 Every Musicbrainz resource has [allowed include parameters](https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#Subqueries).
 
 ```rust
-use musicbrainz_rs::entity::label::*;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::label::*;
+use musicbrainz_rs_nova::prelude::*;
 
 fn main() {
     let ninja_tune = Label::fetch()
@@ -86,10 +99,10 @@ fn main() {
 `Release` and `ReleaseGroup` entities in MusicBrainz also allow you to make CoverArt queries on them:
 
 ```rust
-use musicbrainz_rs::entity::release::*;
-use musicbrainz_rs::entity::CoverartResponse;
-use musicbrainz_rs::prelude::*;
-use musicbrainz_rs::FetchCoverart;
+use musicbrainz_rs_nova::entity::release::*;
+use musicbrainz_rs_nova::entity::CoverartResponse;
+use musicbrainz_rs_nova::prelude::*;
+use musicbrainz_rs_nova::FetchCoverart;
 
 fn main() {
     // CoverArt Query for a Release.
@@ -152,9 +165,9 @@ Use `musicbrainz_rs::Browse` or bring it in scope using `musicbrainz_rs::prelude
 Just like `Include` every muscibrainz resource has allowable linked entities for such queries.
 
 ```rust
-use musicbrainz_rs::entity::artist;
-use musicbrainz_rs::entity::artist::Artist;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::artist;
+use musicbrainz_rs_nova::entity::artist::Artist;
+use musicbrainz_rs_nova::prelude::*;
 
 fn main() {
     let artists_on_in_utero_release = Artist::browse()
@@ -175,8 +188,8 @@ fn main() {
 Use `musicbrainz_rs::Search` to perform a [search query](https://musicbrainz.org/doc/MusicBrainz_API/Search).
 
 ```rust
-use musicbrainz_rs::entity::artist::Artist;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::artist::Artist;
+use musicbrainz_rs_nova::prelude::*;
 
 fn main() {
     musicbrainz_rs::config::set_user_agent("my_awesome_app/1.0");
@@ -198,12 +211,13 @@ fn main() {
 ```
 
 ### Custom user agent
+
 You can set your application user-agent as recommended in the
 [musicbrainz documentation](https://musicbrainz.org/doc/XML_Web_Service/Rate_Limiting#User-Agent) :
 
 ```rust
-use musicbrainz_rs::entity::artist::Artist;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::artist::Artist;
+use musicbrainz_rs_nova::prelude::*;
 
 fn main() {
     musicbrainz_rs::config::set_user_agent("my_awesome_app/1.0");
@@ -216,17 +230,35 @@ fn main() {
 }
 ```
 
+### Rate limit
+
+By default, a rate limiter of 1req/sec is implemented according to MB's policy. This allow to fearlessly send heaps of requests without worrying about DDOSing MusicBrainz. This feature is only available bundled with the `async` feature, as it require an async runtime. But this isn't an issue for `blocking` users, as the api is a bit lenient, and calling requests in a loop rarely achieve 1req/sec
+
 ## Examples
 
 To see what is currently implemented in the crate you can look at the `tests` directory.
 
 You can run examples with `cargo run --example example_name`
 
+## Cargo Features
+
+Here is the list of supported feature values. The default features are: `async`, `rate_limit` and `reqwest/default-tls`
+
+- `blocking`: use a blocking client
+- `async`: use an async client
+- `rate_limit`: add a rate limiter for the requests. Require `async`
+- `rustls`: Use rustls instead of the platform's tls
+- `legacy_serialize`: Use an old version of the serializer for compatibility with musicbrainz_rs and musicbrainz_rs < 0.8.0
+
+## MSRV
+
+The Minimum Supported Rust Version for the crate is `1.70.0`. Any bump to the MSRV will be considered breaking changes.
+
 ## Contributing
 
-All contributions are welcome, if find a bug or have a feature request don't hesitate to open an issue!
+All contributions are welcome, if find a bug or have a feature request don't hesitate to open an issue! You can check the [documentation](https://github.com/RustyNova016/musicbrainz_rs_nova/tree/main/documentation) folder for more information if needed
 
-#### Credits
+## Credits
 
 Most of this crate documentation is taken from the official [MusicBrainz doc](https://musicbrainz.org/doc/MusicBrainz_Documentation),
 thanks to the [MetaBrainz](https://metabrainz.org/) Foundation and its sponsors and supporters.

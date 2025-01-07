@@ -1,9 +1,10 @@
-use musicbrainz_rs::entity::release::*;
-use musicbrainz_rs::entity::CoverartResponse;
-use musicbrainz_rs::Fetch;
-use musicbrainz_rs::FetchCoverart;
+use musicbrainz_rs_nova::entity::release::*;
+use musicbrainz_rs_nova::entity::CoverartResponse;
+use musicbrainz_rs_nova::Fetch;
+use musicbrainz_rs_nova::FetchCoverart;
 
 #[tokio::test]
+#[serial_test::serial]
 async fn should_get_release_coverart() {
     let in_utero_coverart = Release::fetch_coverart()
         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")
@@ -20,6 +21,7 @@ async fn should_get_release_coverart() {
 }
 
 #[tokio::test]
+#[serial_test::serial]
 async fn should_get_release_coverart_after_fetch() {
     let in_utero = Release::fetch()
         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")

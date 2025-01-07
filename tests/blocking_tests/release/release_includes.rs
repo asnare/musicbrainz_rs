@@ -1,6 +1,6 @@
-use musicbrainz_rs::entity::release::Media;
-use musicbrainz_rs::entity::release::Release;
-use musicbrainz_rs::prelude::*;
+use musicbrainz_rs_nova::entity::release::Media;
+use musicbrainz_rs_nova::entity::release::Release;
+use musicbrainz_rs_nova::prelude::*;
 
 use std::collections::HashSet;
 
@@ -131,7 +131,15 @@ fn should_get_release_level_relations() {
     let mut target_types = HashSet::new();
     for media in become_desert.media.unwrap().iter() {
         for track in media.tracks.as_ref().unwrap().iter() {
-            for relation in track.recording.relations.as_ref().unwrap().iter() {
+            for relation in track
+                .recording
+                .as_ref()
+                .unwrap()
+                .relations
+                .as_ref()
+                .unwrap()
+                .iter()
+            {
                 target_types.insert(relation.target_type.clone());
             }
         }
