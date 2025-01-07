@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::event::*;
-use musicbrainz_rs_nova::Search;
+use musicbrainz_rsity::event::*;
+use musicbrainz_rsrch;
 
 #[tokio::test]
 #[serial_test::serial]

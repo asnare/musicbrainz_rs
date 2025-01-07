@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::artist::*;
-use musicbrainz_rs_nova::Search;
+use musicbrainz_rs::entity::artist::*;
+use musicbrainz_rs::Search;
 
 #[tokio::test]
 #[serial_test::serial]

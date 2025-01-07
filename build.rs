@@ -23,32 +23,32 @@ macro_rules! write_test {
                 eprintln!("Writing setting test: {:?}", test_name);
 
                 let type_annotation = match entity_type {
-                    "annotation" => "musicbrainz_rs_nova::entity::annotation::Annotation",
-                    "area" => "musicbrainz_rs_nova::entity::area::Area",
-                    "artist" => "musicbrainz_rs_nova::entity::artist::Artist",
-                    "cdstub" => "musicbrainz_rs_nova::entity::cdstub::CDStub",
-                    "event" => "musicbrainz_rs_nova::entity::event::Event",
-                    "genre" => "musicbrainz_rs_nova::entity::genre::Genre",
-                    "instrument" => "musicbrainz_rs_nova::entity::instrument::Instrument",
-                    "label" => "musicbrainz_rs_nova::entity::label::Label",
-                    "place" => "musicbrainz_rs_nova::entity::place::Place",
-                    "recording" => "musicbrainz_rs_nova::entity::recording::Recording",
-                    "release" => "musicbrainz_rs_nova::entity::release::Release",
-                    "release-group" => "musicbrainz_rs_nova::entity::release_group::ReleaseGroup",
-                    "series" => "musicbrainz_rs_nova::entity::series::Series",
-                    "tag" => "musicbrainz_rs_nova::entity::tag::Tag",
-                    "url" => "musicbrainz_rs_nova::entity::url::Url",
-                    "work" => "musicbrainz_rs_nova::entity::work::Work",
+                    "annotation" => "musicbrainz_rs::entity::annotation::Annotation",
+                    "area" => "musicbrainz_rs::entity::area::Area",
+                    "artist" => "musicbrainz_rs::entity::artist::Artist",
+                    "cdstub" => "musicbrainz_rs::entity::cdstub::CDStub",
+                    "event" => "musicbrainz_rs::entity::event::Event",
+                    "genre" => "musicbrainz_rs::entity::genre::Genre",
+                    "instrument" => "musicbrainz_rs::entity::instrument::Instrument",
+                    "label" => "musicbrainz_rs::entity::label::Label",
+                    "place" => "musicbrainz_rs::entity::place::Place",
+                    "recording" => "musicbrainz_rs::entity::recording::Recording",
+                    "release" => "musicbrainz_rs::entity::release::Release",
+                    "release-group" => "musicbrainz_rs::entity::release_group::ReleaseGroup",
+                    "series" => "musicbrainz_rs::entity::series::Series",
+                    "tag" => "musicbrainz_rs::entity::tag::Tag",
+                    "url" => "musicbrainz_rs::entity::url::Url",
+                    "work" => "musicbrainz_rs::entity::work::Work",
                     _ => unreachable!(),
                 };
 
                 let type_annotation = match request_type {
                     "lookup" => Cow::from(type_annotation),
                     "browse" => Cow::from(format!(
-                        "musicbrainz_rs_nova::entity::BrowseResult<{type_annotation}>"
+                        "musicbrainz_rs::entity::BrowseResult<{type_annotation}>"
                     )),
                     "search" => Cow::from(format!(
-                        "musicbrainz_rs_nova::entity::search::SearchResult<{type_annotation}>"
+                        "musicbrainz_rs::entity::search::SearchResult<{type_annotation}>"
                     )),
                     _ => unreachable!(),
                 };

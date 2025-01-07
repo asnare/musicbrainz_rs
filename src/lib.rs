@@ -10,8 +10,8 @@
 //! The most simple usage would be to lookup an entity, knowing its [Musicbrainz ID](https://musicbrainz.org/doc/MusicBrainz_Identifier).
 //!
 //!  ```rust
-//! use musicbrainz_rs_nova::entity::artist::Artist;
-//! use musicbrainz_rs_nova::prelude::*;
+//! use musicbrainz_rs::entity::artist::Artist;
+//! use musicbrainz_rs::prelude::*;
 //!
 //! # #[cfg(feature = "async")]
 //! #[tokio::main]
@@ -90,11 +90,11 @@ struct Query<T> {
 ///
 /// ## EXample
 /// ```rust
-/// # use musicbrainz_rs_nova::prelude::*;
+/// # use musicbrainz_rs::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::Artist;
+/// # use musicbrainz_rs::entity::artist::Artist;
 /// let nirvana = Artist::fetch()
 ///         .id("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
 ///         .execute()
@@ -105,7 +105,7 @@ struct Query<T> {
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::Artist;
+/// # use musicbrainz_rs::entity::artist::Artist;
 /// let nirvana = Artist::fetch()
 ///         .id("5b11f4ce-a62d-471e-81fc-a69a8278c7da")
 ///         .execute();
@@ -125,12 +125,12 @@ pub struct FetchQuery<T>(Query<T>);
 ///
 /// ## Example
 /// ```rust
-/// # use musicbrainz_rs_nova::prelude::*;
+/// # use musicbrainz_rs::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::release::Release;
-/// # use musicbrainz_rs_nova::entity::CoverartResponse;
+/// # use musicbrainz_rs::entity::release::Release;
+/// # use musicbrainz_rs::entity::CoverartResponse;
 /// let in_utero_coverart = Release::fetch_coverart()
 ///         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")
 ///         .execute()
@@ -146,8 +146,8 @@ pub struct FetchQuery<T>(Query<T>);
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::release::Release;
-/// # use musicbrainz_rs_nova::entity::CoverartResponse;
+/// # use musicbrainz_rs::entity::release::Release;
+/// # use musicbrainz_rs::entity::CoverartResponse;
 /// let in_utero_coverart = Release::fetch_coverart()
 ///         .id("76df3287-6cda-33eb-8e9a-044b5e15ffdd")
 ///         .execute()?;
@@ -180,12 +180,12 @@ pub struct FetchCoverartQuery<T>(CoverartQuery<T>);
 ///
 /// ## Example
 /// ```rust
-/// # use musicbrainz_rs_nova::prelude::*;
+/// # use musicbrainz_rs::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::Artist;
-/// # use musicbrainz_rs_nova::entity::release::Release;
+/// # use musicbrainz_rs::entity::artist::Artist;
+/// # use musicbrainz_rs::entity::release::Release;
 /// let ubiktune_releases = Release::browse()
 ///         .by_label("47e718e1-7ee4-460c-b1cc-1192a841c6e5")
 ///         .execute()
@@ -196,8 +196,8 @@ pub struct FetchCoverartQuery<T>(CoverartQuery<T>);
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::Artist;
-/// # use musicbrainz_rs_nova::entity::release::Release;
+/// # use musicbrainz_rs::entity::artist::Artist;
+/// # use musicbrainz_rs::entity::release::Release;
 /// let ubiktune_releases = Release::browse()
 ///         .by_label("47e718e1-7ee4-460c-b1cc-1192a841c6e5")
 ///         .execute();
@@ -223,11 +223,11 @@ pub struct BrowseQuery<T> {
 /// ## Example
 ///
 ///```rust
-/// # use musicbrainz_rs_nova::prelude::*;
+/// # use musicbrainz_rs::prelude::*;
 /// # #[tokio::main]
 /// # #[cfg(feature = "async")]
 /// # async fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::{Artist, ArtistSearchQuery};
+/// # use musicbrainz_rs::entity::artist::{Artist, ArtistSearchQuery};
 /// let query = ArtistSearchQuery::query_builder()
 ///         .artist("Miles Davis")
 ///         .and()
@@ -247,7 +247,7 @@ pub struct BrowseQuery<T> {
 /// # }
 /// # #[cfg(feature = "blocking")]
 /// # fn main() -> Result<(), Error> {
-/// # use musicbrainz_rs_nova::entity::artist::{Artist, ArtistSearchQuery};
+/// # use musicbrainz_rs::entity::artist::{Artist, ArtistSearchQuery};
 /// let query = ArtistSearchQuery::query_builder()
 ///         .artist("Miles Davis")
 ///         .and()

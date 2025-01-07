@@ -1,6 +1,6 @@
-use musicbrainz_rs_nova::entity::instrument::InstrumentType::*;
-use musicbrainz_rs_nova::entity::instrument::*;
-use musicbrainz_rs_nova::Search;
+use musicbrainz_rs::entity::instrument::InstrumentType::*;
+use musicbrainz_rs::entity::instrument::*;
+use musicbrainz_rs::Search;
 
 #[tokio::test]
 #[serial_test::serial]

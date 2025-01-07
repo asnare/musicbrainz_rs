@@ -14,7 +14,7 @@ mod search {
 mod entity {
     #[test]
     fn test_recording_fields() {
-        use musicbrainz_rs_nova::entity::recording::Recording;
+        use musicbrainz_rs::entity::recording::Recording;
         let recording: Recording = serde_json::from_str(include_str!(
             "data/lookup/recording/b9ad642e-b012-41c7-b72a-42cf4911f9ff.json"
         ))
@@ -38,7 +38,7 @@ mod entity {
 
     #[test]
     fn test_release_fields() {
-        use musicbrainz_rs_nova::entity::release::*;
+        use musicbrainz_rs::entity::release::*;
         let release: Release = serde_json::from_str(include_str!(
             "data/lookup/release//b1dc9838-adf3-43f2-93f9-802b46e5fe59.json"
         ))
@@ -52,7 +52,7 @@ mod entity {
             })
         );
         // TODO: Add support for collections field.
-        // See <https://github.com/RustyNova016/musicbrainz_rs_nova/issues/47>.
+        // See <https://github.com/RustyNova016/musicbrainz_rs/issues/47>.
         assert_eq!(
             release.id,
             "b1dc9838-adf3-43f2-93f9-802b46e5fe59".to_string()
@@ -61,7 +61,7 @@ mod entity {
         assert!(release.aliases.is_some_and(|x| x.len() == 1));
         assert!(release.artist_credit.is_some_and(|x| x.len() == 1));
         // TODO: Add support for cover-art-archive field.
-        // See <https://github.com/RustyNova016/musicbrainz_rs_nova/issues/46>.
+        // See <https://github.com/RustyNova016/musicbrainz_rs/issues/46>.
         assert_eq!(
             release.status_id,
             Some("4e304316-386d-3409-af2e-78857eec5cfe".to_string())

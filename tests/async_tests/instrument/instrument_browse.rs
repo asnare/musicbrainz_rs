@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::instrument::Instrument;
-use musicbrainz_rs_nova::Browse;
+use musicbrainz_rsity::instrument::Instrument;
+use musicbrainz_rswse;
 
 // TODO: find non empty result
 #[tokio::test]

@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::area::*;
-use musicbrainz_rs_nova::prelude::*;
+use musicbrainz_rs::entity::area::*;
+use musicbrainz_rs::prelude::*;
 
 // TODO: find non empty result
 #[test]

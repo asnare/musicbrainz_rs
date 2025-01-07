@@ -1,6 +1,6 @@
-use musicbrainz_rs_nova::entity::area::AreaType::*;
-use musicbrainz_rs_nova::entity::area::*;
-use musicbrainz_rs_nova::Search;
+use musicbrainz_rs::entity::area::AreaType::*;
+use musicbrainz_rs::entity::area::*;
+use musicbrainz_rs::Search;
 
 #[tokio::test]
 #[serial_test::serial]
