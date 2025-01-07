@@ -33,7 +33,7 @@ fn should_get_artist_by_id() {
             id: String::from("5b11f4ce-a62d-471e-81fc-a69a8278c7da"),
             name: String::from("Nirvana"),
             sort_name: String::from("Nirvana"),
-            disambiguation: String::from("90s US grunge band"),
+            disambiguation: String::from("1980s~1990s US grunge band"),
             artist_type: Some(Group),
             gender: None,
             country: Some("US".to_string()),
@@ -52,24 +52,10 @@ fn should_get_artist_by_id() {
                 genres: None,
                 annotation: None,
             }),
-            begin_area: Some(Area {
-                id: "a640b45c-c173-49b1-8030-973603e895b5".to_string(),
-                area_type: None,
-                type_id: None,
-                disambiguation: "".to_string(),
-                name: "Aberdeen".to_string(),
-                sort_name: "Aberdeen".to_string(),
-                relations: None,
-                iso_3166_1_codes: None,
-                life_span: None,
-                tags: None,
-                aliases: None,
-                genres: None,
-                annotation: None,
-            }),
+            begin_area: None,
             life_span: Some(LifeSpan {
                 ended: Some(true),
-                begin: Some(NaiveDate::from_ymd_opt(1988, 1, 1).unwrap()),
+                begin: Some(NaiveDate::from_ymd_opt(1987, 1, 1).unwrap()),
                 end: Some(NaiveDate::from_ymd_opt(1994, 4, 5).unwrap()),
             }),
             tags: None,
@@ -160,6 +146,7 @@ fn should_get_recording_by_id() {
             genres: None,
             annotation: None,
             isrcs: None,
+            first_release_date: None,
         }
     );
 }
@@ -222,6 +209,11 @@ fn should_get_release() {
             aliases: None,
             genres: None,
             annotation: None,
+            text_representation: Some(ReleaseTextRepresentation {
+                script: Some(ReleaseScript::Latn),
+                language: Some(Language::Eng),
+            }),
+            asin: None,
         }
     );
 }
@@ -357,7 +349,7 @@ fn should_get_event_by_id() {
             type_id: Some("b6ded574-b592-3f0e-b56e-5b5f06aa0678".to_string()),
             event_type: Some(EventType::Festival),
             disambiguation: Some("".to_string()),
-            time: "".to_string(),
+            time: Some("".to_string()),
             setlist: Some("".to_string()),
             life_span: Some(LifeSpan {
                 begin: Some(NaiveDate::from_ymd_opt(1989, 9, 16).unwrap()),
@@ -434,8 +426,8 @@ fn should_get_place() {
                 annotation: None,
             }),
             coordinates: Some(Coordinates {
-                latitude: 41.882_059,
-                longitude: -87.630_881,
+                latitude: 41.882_059.into(),
+                longitude: (-87.630_881).into(),
             }),
             relations: None,
             aliases: None,
