@@ -3,8 +3,6 @@ use musicbrainz_rs::prelude::*;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    musicbrainz_rs::config::set_user_agent("my_awesome_app/1.0");
-
     let query = ArtistSearchQuery::query_builder()
         .artist("Miles Davis")
         .and()
