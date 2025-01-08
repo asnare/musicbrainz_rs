@@ -19,7 +19,12 @@ macro_rules! write_test {
                     .map(|component| component.to_str().unwrap());
                 let request_type = components.next().unwrap();
                 let entity_type = components.next().unwrap();
-                let test_name = std::iter::once(entity_type).chain(components).collect::<Vec<&str>>().join("_").replace(".", "_").replace("-", "_");
+                let test_name = std::iter::once(entity_type)
+                    .chain(components)
+                    .collect::<Vec<&str>>()
+                    .join("_")
+                    .replace(".", "_")
+                    .replace("-", "_");
                 eprintln!("Writing setting test: {:?}", test_name);
 
                 let type_annotation = match entity_type {
