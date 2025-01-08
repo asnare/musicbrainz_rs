@@ -1,6 +1,8 @@
 #[cfg(feature = "rate_limit")]
 use core::num::NonZeroU32;
 use core::time::Duration;
+#[cfg(feature = "rate_limit")]
+use std::sync::Arc;
 
 use once_cell::sync::Lazy;
 #[cfg(feature = "blocking")]
@@ -24,7 +26,7 @@ use crate::HTTP_RATELIMIT_CODE;
 
 pub static MUSICBRAINZ_CLIENT: Lazy<MusicBrainzClient> = Lazy::new(MusicBrainzClient::default);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MusicBrainzClient {
     pub musicbrainz_url: String,
     pub coverart_archive_url: String,
@@ -39,7 +41,7 @@ pub struct MusicBrainzClient {
     /// So you may keep it in mind when designing your apps that you have 5 "free" requests
     #[cfg(feature = "rate_limit")]
     pub rate_limit:
-        Option<RateLimiter<NotKeyed, InMemoryState, clock::DefaultClock, NoOpMiddleware>>,
+        Option<Arc<RateLimiter<NotKeyed, InMemoryState, clock::DefaultClock, NoOpMiddleware>>>,
 }
 
 // Common implements
@@ -211,7 +213,7 @@ impl Default for MusicBrainzClient {
 
             reqwest_client,
             #[cfg(feature = "rate_limit")]
-            rate_limit: Some(RateLimiter::direct(quota)),
+            rate_limit: Some(Arc::new(RateLimiter::direct(quota))),
         }
     }
 }
