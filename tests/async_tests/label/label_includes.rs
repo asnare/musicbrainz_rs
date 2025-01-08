@@ -1,5 +1,5 @@
-use musicbrainz_rsity::label::Label;
-use musicbrainz_rslude::*;
+use musicbrainz_rs::entity::label::Label;
+use musicbrainz_rs::prelude::*;
 
 #[tokio::test]
 #[serial_test::serial]
