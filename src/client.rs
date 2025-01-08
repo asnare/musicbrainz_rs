@@ -24,6 +24,7 @@ use crate::HTTP_RATELIMIT_CODE;
 
 pub static MUSICBRAINZ_CLIENT: Lazy<MusicBrainzClient> = Lazy::new(MusicBrainzClient::default);
 
+#[derive(Debug)]
 pub struct MusicBrainzClient {
     pub musicbrainz_url: String,
     pub coverart_archive_url: String,
