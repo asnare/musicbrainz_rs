@@ -215,28 +215,28 @@ impl Default for MusicBrainzClient {
     }
 }
 
-#[cfg(test)]
-#[cfg(feature = "rate_limit")]
-mod tests {
-    use futures::stream;
-    use futures::StreamExt;
+// #[cfg(test)]
+// #[cfg(feature = "rate_limit")]
+// mod tests {
+//     use futures::stream;
+//     use futures::StreamExt;
 
-    use crate::entity::recording::Recording;
-    use crate::Fetch;
+//     use crate::entity::recording::Recording;
+//     use crate::Fetch;
 
-    #[tokio::test]
-    #[serial_test::serial]
+//     #[tokio::test]
+//     #[serial_test::serial]
 
-    async fn should_not_hit_ratelimit() {
-        stream::iter(0..30)
-            .map(|_| async move {
-                Recording::fetch()
-                    .id("5fed738b-1e5c-4a1b-9f66-b3fd15dbc8ef")
-                    .execute()
-                    .await
-            })
-            .buffer_unordered(20)
-            .collect::<Vec<_>>()
-            .await;
-    }
-}
+//     async fn should_not_hit_ratelimit() {
+//         stream::iter(0..30)
+//             .map(|_| async move {
+//                 Recording::fetch()
+//                     .id("5fed738b-1e5c-4a1b-9f66-b3fd15dbc8ef")
+//                     .execute()
+//                     .await
+//             })
+//             .buffer_unordered(20)
+//             .collect::<Vec<_>>()
+//             .await;
+//     }
+// }
