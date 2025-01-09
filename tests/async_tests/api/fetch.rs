@@ -122,8 +122,7 @@ async fn should_get_artist_relations_from_release() {
             type_id: "87e922ba-872e-418a-9f41-0a63aa3c30cc".to_string(),
             begin: None,
             direction: "backward".to_string(),
-            relation_type: "engineer".to_string(),
-            ordering_key: None
+            relation_type: "engineer".to_string()
         }]
     );
 }

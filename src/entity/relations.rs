@@ -56,9 +56,6 @@ pub struct Relation {
     pub direction: String,
     #[serde(rename = "type")]
     pub relation_type: String,
-
-    /// The order of the relationship
-    pub ordering_key: Option<u64>
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
