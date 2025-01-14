@@ -253,6 +253,9 @@ pub enum WorkAttribute {
     /// ID for the German rights society GEMA
     #[serde(rename = "GEMA ID")]
     GemaId(String),
+    // TODO: #108 Id info
+    #[serde(rename = "GMR ID")]
+    GmrId(String),
     /// ID for the private licensing company HFA (Harry Fox Agency)
     #[serde(rename = "HFA ID")]
     HfaId(String),
