@@ -110,3 +110,6 @@ path = "examples/async/set_user_agent.rs"
 [[test]]
 name = "all"
 path = "tests/tests.rs"
+
+[package.metadata.docs.rs]
+cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples"]
