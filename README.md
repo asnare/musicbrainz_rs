@@ -1,33 +1,36 @@
 # ![MusicBrainz] Rust &emsp;
 
-[![Latest Version]][crates.io] [![Build Status]][Action] [![codecov](https://codecov.io/gh/oknozor/musicbrainz_rs/branch/master/graph/badge.svg)](https://codecov.io/gh/oknozor/musicbrainz_rs) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/oknozor/musicbrainz_rs) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![License](https://img.shields.io/github/license/oknozor/musicbrainz_rs)
+[![Latest Version]][crates.io] [![Build Status]][Action] [![codecov](https://codecov.io/gh/oknozor/musicbrainz_rs/branch/master/graph/badge.svg)](https://codecov.io/gh/oknozor/musicbrainz_rs) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/RustyNova016/musicbrainz_rs) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![License](https://img.shields.io/github/license/RustyNova016/musicbrainz_rs)
 
-[Build Status]: https://github.com/oknozor/musicbrainz_rs/actions/workflows/CI.yaml/badge.svg
-[Action]: https://github.com/oknozor/musicbrainz_rs/actions/workflows/CI.yaml
+[Build Status]: https://github.com/RustyNova016/musicbrainz_rs/actions/workflows/rust_check.yaml/badge.svg
+[Action]: https://github.com/RustyNova016/musicbrainz_rs/actions/workflows/rust_check.yaml
 [Latest Version]: https://img.shields.io/crates/v/musicbrainz_rs.svg
 [crates.io]: https://www.crates.io/crates/musicbrainz_rs
-[MusicBrainz]: https://staticbrainz.org/MB/header-logo-791fb3f.svg
+[MusicBrainz]: https://static.metabrainz.org/MB/header-logo-1f7dc2a.svg
 
 **MusicBrainz rust is a utility crate for the the [MusicBrainz API](https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2).**
 
 ---
 
 you may be looking for :
+
 - [Api documention](https://docs.rs/musicbrainz_rs)
-- [The crate](https://www.crates.io/crates/musicbrainz_rs)
+- [The crate](https://crates.io/crates/musicbrainz_rs)
 
 ## Usage
 
-You can choose to use either the default async client or a blocking one. 
+You can choose to use either the default async client or a blocking one.
 
 **async client:**
+
 ```toml
-musicbrainz_rs = "0.5.0"
+musicbrainz_rs = "0.8.0"
 ```
 
 **blocking client:**
+
 ```toml
-musicbrainz_rs = { version = "0.5.0", features = ["blocking] }
+musicbrainz_rs = { version = "0.8.0", default-features = false, features = ["blocking"] }
 ```
 
 ## Features
@@ -198,8 +201,9 @@ fn main() {
 ```
 
 ### Custom user agent
-You can set your application user-agent as recommended in the
-[musicbrainz documentation](https://musicbrainz.org/doc/XML_Web_Service/Rate_Limiting#User-Agent) :
+
+By default, the user agent will be set to `musicbrainz_rs/<version>`.
+To comply with [MB's API rules](https://musicbrainz.org/doc/MusicBrainz_API#Application_rate_limiting_and_identification), you should set this to a custom string that identifies your application:
 
 ```rust
 use musicbrainz_rs::entity::artist::Artist;
@@ -216,17 +220,35 @@ fn main() {
 }
 ```
 
+### Rate limit
+
+By default, a rate limiter of 1req/sec is implemented according to [MB's policy](https://musicbrainz.org/doc/MusicBrainz_API#Application_rate_limiting_and_identification). This allows to fearlessly send heaps of requests without worrying about DOS'ing MusicBrainz. This feature is only available bundled with the `async` feature, as it require an async runtime. But this isn't an issue for `blocking` users, as the API is a bit lenient, and calling requests in a loop rarely achieve 1req/sec
+
 ## Examples
 
 To see what is currently implemented in the crate you can look at the `tests` directory.
 
 You can run examples with `cargo run --example example_name`
 
+## Cargo Features
+
+Here is the list of supported feature values. The default features are: `async`, `rate_limit` and `reqwest/default-tls`
+
+- `blocking`: use a blocking client
+- `async`: use an async client
+- `rate_limit`: add a rate limiter for the requests. Require `async`
+- `rustls`: Use rustls instead of the platform's tls
+- `legacy_serialize`: Use an old version of the serializer for compatibility with musicbrainz_rs < 0.8.0 and musicbrainz_rs_nova < 0.8.0
+
+## MSRV
+
+The Minimum Supported Rust Version for the crate is `1.70.0`. Any bump to the MSRV will be considered breaking changes (Until resolver v3 is more widely used).
+
 ## Contributing
 
-All contributions are welcome, if find a bug or have a feature request don't hesitate to open an issue!
+All contributions are welcome, if find a bug or have a feature request don't hesitate to open an issue! You can check the [documentation](https://github.com/RustyNova016/musicbrainz_rs/tree/main/documentation) folder for more information if needed
 
-#### Credits
+## Credits
 
 Most of this crate documentation is taken from the official [MusicBrainz doc](https://musicbrainz.org/doc/MusicBrainz_Documentation),
 thanks to the [MetaBrainz](https://metabrainz.org/) Foundation and its sponsors and supporters.

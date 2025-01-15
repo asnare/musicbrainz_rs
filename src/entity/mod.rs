@@ -1,11 +1,11 @@
 use std::marker::PhantomData;
 
-use crate::config::*;
 use crate::entity::annotation::Annotation;
 use crate::entity::area::Area;
 use crate::entity::artist::Artist;
 use crate::entity::cdstub::CDStub;
 use crate::entity::coverart::Coverart;
+use crate::entity::discid::Discid;
 use crate::entity::event::Event;
 use crate::entity::instrument::*;
 use crate::entity::label::Label;
@@ -21,27 +21,21 @@ use crate::Path;
 use crate::{Browse, Search};
 use crate::{CoverartQuery, FetchCoverart, FetchCoverartQuery};
 use serde::Serialize;
+#[cfg(not(feature = "legacy_serialize"))]
+use serde::Serializer;
 
 macro_rules! impl_includes {
     ($ty: ty, $(($args:ident, $inc: expr)),+) => {
-        use crate::{FetchQuery, BrowseQuery, SearchQuery};
-        impl FetchQuery<$ty> {
+        impl crate::FetchQuery<$ty> {
                $(pub fn $args(&mut self) -> &mut Self  {
                      self.0.include = self.0.include($inc).include.to_owned();
                    self
                })*
             }
 
-        impl BrowseQuery<$ty> {
+        impl crate::SearchQuery<$ty> {
                $(pub fn $args(&mut self) -> &mut Self  {
                      self.inner.include = self.inner.include($inc).include.to_owned();
-                   self
-               })*
-            }
-
-        impl SearchQuery<$ty> {
-               $(pub fn $args(&mut self) -> &mut Self  {
-                     self.0.include = self.0.include($inc).include.to_owned();
                    self
                })*
             }
@@ -50,11 +44,10 @@ macro_rules! impl_includes {
 
 macro_rules! impl_browse {
     ($ty: ty, $(($args:ident, $browse: expr)),+) => {
-        impl BrowseQuery<$ty> {
+        impl crate::BrowseQuery<$ty> {
                $(pub fn $args(&mut self, id: &str) -> &mut Self  {
                     use std::fmt::Write as _;
-                    self.inner.path.push_str(crate::config::FMT_JSON);
-                    let _ = write!(self.inner.path, "&{}={}", $browse.as_str(), id);
+                    let _ = write!(self.id, "{}={}", $browse.as_str(), id);
                     self
                })*
             }
@@ -63,10 +56,10 @@ macro_rules! impl_browse {
 
 macro_rules! impl_fetchcoverart {
     ($($t: ty), +) => {
-        $(impl<'a> FetchCoverart<'a> for $t {
+        $(impl FetchCoverart for $t {
             fn get_coverart(&self) -> FetchCoverartQuery<Self> {
                 let mut coverart_query = FetchCoverartQuery(CoverartQuery {
-                    path: format!("{}/{}", BASE_COVERART_URL, Self::path()),
+                    path: Self::path().to_string(),
                     phantom: PhantomData,
                     target: CoverartTarget {
                         img_type: None,
@@ -82,11 +75,13 @@ macro_rules! impl_fetchcoverart {
 
 pub mod alias;
 pub mod annotation;
+pub mod api;
 pub mod area;
 pub mod artist;
 pub mod artist_credit;
 pub mod cdstub;
 pub mod coverart;
+pub mod discid;
 pub mod event;
 pub mod genre;
 pub mod instrument;
@@ -104,135 +99,148 @@ pub mod tag;
 pub mod url;
 pub mod work;
 
-impl Fetch<'_> for Artist {}
-impl Fetch<'_> for Recording {}
-impl Fetch<'_> for ReleaseGroup {}
-impl Fetch<'_> for Release {}
-impl Fetch<'_> for Work {}
-impl Fetch<'_> for Label {}
-impl Fetch<'_> for Area {}
-impl Fetch<'_> for Event {}
-impl Fetch<'_> for Instrument {}
-impl Fetch<'_> for Place {}
-impl Fetch<'_> for Series {}
-impl Fetch<'_> for Url {}
+impl Fetch for Artist {}
+impl Fetch for Recording {}
+impl Fetch for ReleaseGroup {}
+impl Fetch for Release {}
+impl Fetch for Work {}
+impl Fetch for Label {}
+impl Fetch for Area {}
+impl Fetch for Event {}
+impl Fetch for Instrument {}
+impl Fetch for Place {}
+impl Fetch for Series {}
+impl Fetch for Url {}
+impl Fetch for Discid {}
 
 impl_fetchcoverart!(Release, ReleaseGroup);
 
-impl Browse<'_> for Artist {}
-impl Browse<'_> for Area {}
-impl Browse<'_> for Recording {}
-impl Browse<'_> for ReleaseGroup {}
-impl Browse<'_> for Release {}
-impl Browse<'_> for Label {}
-impl Browse<'_> for Event {}
-impl Browse<'_> for Place {}
-impl Browse<'_> for Work {}
-impl Browse<'_> for Instrument {}
-impl Browse<'_> for Series {}
+impl Browse for Artist {}
+impl Browse for Area {}
+impl Browse for Recording {}
+impl Browse for ReleaseGroup {}
+impl Browse for Release {}
+impl Browse for Label {}
+impl Browse for Event {}
+impl Browse for Place {}
+impl Browse for Work {}
+impl Browse for Instrument {}
+impl Browse for Series {}
 
-impl Search<'_> for Area {}
-impl Search<'_> for Annotation {}
-impl Search<'_> for Artist {}
-impl Search<'_> for Event {}
-impl Search<'_> for Instrument {}
-impl Search<'_> for Label {}
-impl Search<'_> for Recording {}
-impl Search<'_> for Release {}
-impl Search<'_> for ReleaseGroup {}
-impl Search<'_> for Series {}
-impl Search<'_> for Work {}
-impl Search<'_> for CDStub {}
+impl Search for Area {}
+impl Search for Annotation {}
+impl Search for Artist {}
+impl Search for Event {}
+impl Search for Instrument {}
+impl Search for Label {}
+impl Search for Recording {}
+impl Search for Release {}
+impl Search for ReleaseGroup {}
+impl Search for Series {}
+impl Search for Work {}
+impl Search for CDStub {}
 
-impl Path<'_> for Annotation {
+impl Path for Annotation {
     fn path() -> &'static str {
         "annotation"
     }
 }
 
-impl Path<'_> for Artist {
+impl Path for Artist {
     fn path() -> &'static str {
         "artist"
     }
 }
 
-impl Path<'_> for Recording {
+impl Path for Recording {
     fn path() -> &'static str {
         "recording"
     }
 }
 
-impl Path<'_> for ReleaseGroup {
+impl Path for ReleaseGroup {
     fn path() -> &'static str {
         "release-group"
     }
 }
 
-impl Path<'_> for Release {
+impl Path for Release {
     fn path() -> &'static str {
         "release"
     }
 }
 
-impl Path<'_> for Work {
+impl Path for Work {
     fn path() -> &'static str {
         "work"
     }
 }
 
-impl Path<'_> for Label {
+impl Path for Label {
     fn path() -> &'static str {
         "label"
     }
 }
 
-impl Path<'_> for Area {
+impl Path for Area {
     fn path() -> &'static str {
         "area"
     }
 }
 
-impl Path<'_> for Event {
+impl Path for Event {
     fn path() -> &'static str {
         "event"
     }
 }
 
-impl Path<'_> for Instrument {
+impl Path for Instrument {
     fn path() -> &'static str {
         "instrument"
     }
 }
 
-impl Path<'_> for Place {
+impl Path for Place {
     fn path() -> &'static str {
         "place"
     }
 }
 
-impl Path<'_> for Series {
+impl Path for Series {
     fn path() -> &'static str {
         "series"
     }
 }
 
-impl Path<'_> for Url {
+impl Path for Url {
     fn path() -> &'static str {
         "url"
     }
 }
 
-impl Path<'_> for CDStub {
+impl Path for CDStub {
     fn path() -> &'static str {
         "cdstub"
     }
 }
 
+impl Path for Discid {
+    fn path() -> &'static str {
+        "discid"
+    }
+}
+
+//TODO: This whole `Include` thing is an overly complicated way to get a string. Would be nice to remove it
+
+/// A query parameter that allows adding requested data to the query
 #[derive(Debug, PartialEq, Clone)]
 #[allow(unused)]
 pub(crate) enum Include {
     Subquery(Subquery),
     Relationship(Relationship),
+
+    // Temporary replacement for string passing
+    Other(&'static str),
 }
 
 impl Include {
@@ -240,6 +248,7 @@ impl Include {
         match self {
             Include::Subquery(i) => i.as_str(),
             Include::Relationship(i) => i.as_str(),
+            Include::Other(val) => val,
         }
     }
 }
@@ -268,6 +277,7 @@ pub(crate) enum Subquery {
     Series,
     Instruments,
     ISRCs,
+    Media,
 }
 
 impl Subquery {
@@ -294,6 +304,7 @@ impl Subquery {
             Subquery::Instruments => "instruments",
             Subquery::Series => "series",
             Subquery::ISRCs => "isrcs",
+            Subquery::Media => "media",
         }
     }
 }
@@ -304,6 +315,7 @@ pub(crate) enum Relationship {
     Area,
     Artist,
     Event,
+    Genre,
     Instrument,
     Label,
     Place,
@@ -314,15 +326,18 @@ pub(crate) enum Relationship {
     Url,
     Work,
     RecordingLevel,
+    ReleaseGroupLevel,
     WorkLevel,
 }
 
 impl Relationship {
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
+            // Main entity relations
             Relationship::Area => "area-rels",
             Relationship::Artist => "artist-rels",
             Relationship::Event => "event-rels",
+            Relationship::Genre => "genre-rels",
             Relationship::Instrument => "instrument-rels",
             Relationship::Label => "label-rels",
             Relationship::Place => "place-rels",
@@ -332,7 +347,10 @@ impl Relationship {
             Relationship::Series => "series-rels",
             Relationship::Url => "url-rels",
             Relationship::Work => "work-rels",
+
+            // Special relations
             Relationship::RecordingLevel => "recording-level-rels",
+            Relationship::ReleaseGroupLevel => "release-group-level-rels",
             Relationship::WorkLevel => "work-level-rels",
         }
     }
@@ -372,12 +390,34 @@ impl BrowseBy {
 
 /// Browse query result are wrapped in this generic struct and paired with a custom
 /// Deserialize implementation to avoid reimplementing a custom deserializer for every entity.
-#[derive(Debug, Serialize, PartialEq, Eq, Clone)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[derive(Debug, PartialEq, Eq, Clone)]
+#[cfg_attr(
+    feature = "legacy_serialize",
+    derive(Serialize),
+    serde(rename_all(deserialize = "kebab-case"))
+)]
 pub struct BrowseResult<T> {
     pub count: i32,
     pub offset: i32,
     pub entities: Vec<T>,
+}
+
+#[cfg(not(feature = "legacy_serialize"))]
+impl<T> Serialize for BrowseResult<T>
+where
+    T: Browsable + Serialize,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        use serde::ser::SerializeMap;
+        let mut map = serializer.serialize_map(Some(3))?;
+        map.serialize_entry(T::COUNT_FIELD, &self.count)?;
+        map.serialize_entry(T::OFFSET_FIELD, &self.offset)?;
+        map.serialize_entry(T::ENTITIES_FIELD, &self.entities)?;
+        map.end()
+    }
 }
 
 pub trait Browsable {

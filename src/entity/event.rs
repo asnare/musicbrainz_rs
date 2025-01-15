@@ -6,6 +6,8 @@ use crate::entity::rating::Rating;
 use crate::entity::relations::Relation;
 use crate::entity::tag::Tag;
 use crate::entity::BrowseBy;
+use crate::query::browse::impl_browse_includes;
+use crate::query::relations::impl_relations_includes;
 use serde::{Deserialize, Serialize};
 
 use chrono::NaiveDate;
@@ -51,7 +53,11 @@ pub enum EventType {
 /// An event refers to an organised event which people can attend, and is relevant to MusicBrainz.
 /// Generally this means live performances, like concerts and festivals.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[cfg_attr(
+    feature = "legacy_serialize",
+    serde(rename_all(deserialize = "kebab-case"))
+)]
+#[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
 pub struct Event {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -68,7 +74,7 @@ pub struct Event {
     pub cancelled: Option<bool>,
 
     /// The time is the start time of the event.
-    pub time: String,
+    pub time: Option<String>,
 
     /// The setlist stores a list of songs performed, optionally including links to artists and works.
     /// See the setlist documentation for syntax and examples.
@@ -166,6 +172,18 @@ pub struct EventSearchQuery {
     pub event_type: String,
 }
 
+impl_includes!(
+    Event,
+    (with_tags, Include::Subquery(Subquery::Tags)),
+    (with_aliases, Include::Subquery(Subquery::Aliases)),
+    (with_ratings, Include::Subquery(Subquery::Rating)),
+    (with_genres, Include::Subquery(Subquery::Genres)),
+    (with_annotations, Include::Subquery(Subquery::Annotations))
+);
+
+// Relationships includes
+impl_relations_includes!(Event);
+
 impl_browse! {
 Event,
    (by_area, BrowseBy::Area),
@@ -174,24 +192,13 @@ Event,
    (by_place, BrowseBy::Place)
 }
 
-impl_includes!(
+impl_browse_includes!(
     Event,
-    (
-        with_artist_relations,
-        Include::Relationship(Relationship::Artist)
-    ),
-    (
-        with_place_relations,
-        Include::Relationship(Relationship::Place)
-    ),
-    (
-        with_series_relations,
-        Include::Relationship(Relationship::Series)
-    ),
-    (with_url_relations, Include::Relationship(Relationship::Url)),
-    (with_tags, Include::Subquery(Subquery::Tags)),
-    (with_aliases, Include::Subquery(Subquery::Aliases)),
-    (with_ratings, Include::Subquery(Subquery::Rating)),
-    (with_genres, Include::Subquery(Subquery::Genres)),
-    (with_annotations, Include::Subquery(Subquery::Annotations))
+    // Common includes.
+    (with_annotation, Include::Other("annotation")),
+    (with_tags, Include::Other("tags")),
+    (with_user_tags, Include::Other("user-tags")),
+    (with_genres, Include::Other("genres")),
+    (with_user_genres, Include::Other("user-genres")),
+    (with_aliases, Include::Other("aliases"))
 );

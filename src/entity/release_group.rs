@@ -8,6 +8,8 @@ use crate::entity::relations::Relation;
 use crate::entity::release::Release;
 use crate::entity::tag::Tag;
 use crate::entity::BrowseBy;
+use crate::query::browse::impl_browse_includes;
+use crate::query::relations::impl_relations_includes;
 use chrono::NaiveDate;
 use lucene_query_builder::QueryBuilder;
 use serde::{Deserialize, Serialize};
@@ -15,7 +17,11 @@ use serde::{Deserialize, Serialize};
 /// A release group, just as the name suggests, is used to group several different releases into a
 /// single logical entity. Every release belongs to one, and only one release group.
 #[derive(Debug, Default, Serialize, Deserialize, PartialEq, Clone)]
-#[serde(rename_all(deserialize = "kebab-case"))]
+#[cfg_attr(
+    feature = "legacy_serialize",
+    serde(rename_all(deserialize = "kebab-case"))
+)]
+#[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
 #[serde(default)]
 pub struct ReleaseGroup {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
@@ -160,22 +166,28 @@ ReleaseGroup,
    (by_collection, BrowseBy::Collection)
 }
 
+impl_browse_includes!(
+    ReleaseGroup,
+    // Common includes.
+    (with_annotation, Include::Other("annotation")),
+    (with_tags, Include::Other("tags")),
+    (with_user_tags, Include::Other("user-tags")),
+    (with_genres, Include::Other("genres")),
+    (with_user_genres, Include::Other("user-genres")),
+    (with_artist_credits, Include::Other("artist-credits"))
+);
+
 impl_includes!(
     ReleaseGroup,
-    (
-        with_release_group_relations,
-        Include::Relationship(Relationship::ReleaseGroup)
-    ),
-    (
-        with_series_relations,
-        Include::Relationship(Relationship::Series)
-    ),
-    (with_url_relations, Include::Relationship(Relationship::Url)),
     (with_artists, Include::Subquery(Subquery::Artists)),
     (with_releases, Include::Subquery(Subquery::Releases)),
+    (with_medias, Include::Subquery(Subquery::Media)),
     (with_tags, Include::Subquery(Subquery::Tags)),
     (with_aliases, Include::Subquery(Subquery::Aliases)),
     (with_genres, Include::Subquery(Subquery::Genres)),
     (with_ratings, Include::Subquery(Subquery::Rating)),
     (with_annotations, Include::Subquery(Subquery::Annotations))
 );
+
+// Relationships includes
+impl_relations_includes!(ReleaseGroup);
