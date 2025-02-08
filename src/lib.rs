@@ -55,7 +55,7 @@ pub mod config;
 /// Configure the HTTP client global state
 pub mod client;
 
-/// The deserializers for the specific Musicbrainz responces
+/// The deserializers for the specific Musicbrainz responses
 mod deserialization;
 
 /// All Musicbrainz entities
