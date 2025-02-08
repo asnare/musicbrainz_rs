@@ -14,7 +14,7 @@
 
 you may be looking for :
 
-- [Api documention](https://docs.rs/musicbrainz_rs)
+- [Api documentation](https://docs.rs/musicbrainz_rs)
 - [The crate](https://crates.io/crates/musicbrainz_rs)
 
 ## Usage
