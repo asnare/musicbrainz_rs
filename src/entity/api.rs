@@ -12,10 +12,10 @@ pub enum MusicbrainzResult<T> {
 }
 
 impl<T> MusicbrainzResult<T> {
-    pub fn into_result(self, querry: String) -> Result<T, Error> {
+    pub fn into_result(self, query: String) -> Result<T, Error> {
         match self {
             Self::Ok(val) => Ok(val),
-            Self::Err(err) => Err(err.into_error(querry)),
+            Self::Err(err) => Err(err.into_error(query)),
         }
     }
 }
@@ -28,9 +28,9 @@ pub struct MusicbrainzError {
 }
 
 impl MusicbrainzError {
-    pub fn into_error(self, querry: String) -> Error {
+    pub fn into_error(self, query: String) -> Error {
         if self.is_not_found() {
-            return Error::NotFound(querry);
+            return Error::NotFound(query);
         }
 
         Error::MusicbrainzError(self)

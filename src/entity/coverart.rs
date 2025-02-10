@@ -22,7 +22,7 @@ pub struct CoverartImage {
 pub struct Thumbnail {
     /// This is now deprecated in MusicBrainz API. Use `res_250` instead.
     pub small: Option<String>,
-    /// khis is now deprecated in MusicBrainz API. Use `res_500` instead.
+    /// This is now deprecated in MusicBrainz API. Use `res_500` instead.
     pub large: Option<String>,
 
     #[serde(rename = "1200")]
