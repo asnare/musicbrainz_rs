@@ -22,6 +22,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(default)]
 pub struct ReleaseGroup {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
@@ -71,6 +72,7 @@ pub struct ReleaseGroup {
 /// Variants are derived from the `release_group_primary_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleaseGroupPrimaryType {
     Album,
     Single,
@@ -90,6 +92,7 @@ pub enum ReleaseGroupPrimaryType {
 /// Variants are derived from the `release_group_secondary_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleaseGroupSecondaryType {
     #[serde(rename = "Audio drama")]
     AudioDrama,

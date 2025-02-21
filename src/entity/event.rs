@@ -19,6 +19,7 @@ use lucene_query_builder::QueryBuilder;
 /// Variants are derived from the `event_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum EventType {
     /// An individual concert by a single artist or collaboration, often with supporting artists
     /// who perform before the main act.
@@ -58,6 +59,7 @@ pub enum EventType {
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Event {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,

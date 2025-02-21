@@ -18,6 +18,7 @@ use lucene_query_builder::QueryBuilder;
 /// Variants are derived from the `work_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(from = "String")]
 pub enum WorkType {
     /// Corresponds to the "Song" work type.
@@ -183,6 +184,7 @@ impl From<String> for WorkType {
 /// Variants are derived from the `work_attribute_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(tag = "type", content = "value")]
 pub enum WorkAttribute {
     /// A musical key and mode
@@ -408,6 +410,7 @@ pub enum WorkAttribute {
 /// Musical Keys are found as possible allowed values for work attribute types in `work_attribute_type_allowed_value`.  
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(from = "String", into = "String")]
 pub enum MusicalKey {
     CFlatMajor,
@@ -608,6 +611,7 @@ impl From<MusicalKey> for String {
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Work {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -638,6 +642,7 @@ pub struct Work {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, QueryBuilder)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct WorkSearchQuery {
     /// (part of) any alias attached to the work (diacritics are ignored)
     pub alias: String,

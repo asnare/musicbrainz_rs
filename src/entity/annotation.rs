@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Annotation {
     /// the annotated entity's MBID
     pub entity: String,
@@ -28,6 +29,7 @@ pub struct Annotation {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, QueryBuilder)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct AnnotationSearchQuery {
     /// the annotated entity's MBID
     pub entity: String,

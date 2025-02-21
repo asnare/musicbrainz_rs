@@ -18,6 +18,7 @@ use lucene_query_builder::QueryBuilder;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Series {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -53,6 +54,7 @@ pub struct Series {
 /// Variants are derived from the `series_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum SeriesType {
     /// A series of release groups.
     #[serde(rename = "Release group series")]
@@ -92,6 +94,7 @@ pub enum SeriesType {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, QueryBuilder)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct SeriesSearchQuery {
     /// (part of) any alias attached to the series (diacritics are ignored)
     pub alias: String,

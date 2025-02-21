@@ -23,6 +23,7 @@ use std::collections::HashMap;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Relation {
     #[serde(default)]
     #[serde(deserialize_with = "date_format::deserialize_opt")]
@@ -67,6 +68,7 @@ pub struct Relation {
     serde(rename_all(deserialize = "snake_case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "snake_case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum RelationContent {
     // see https://rust-lang.github.io/rust-clippy/master/index.html#large_enum_variant
     Artist(Box<Artist>),

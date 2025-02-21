@@ -1,11 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Coverart {
     pub images: Vec<CoverartImage>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct CoverartImage {
     pub approved: bool,
     pub back: bool,
@@ -19,6 +21,7 @@ pub struct CoverartImage {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Thumbnail {
     /// This is now deprecated in MusicBrainz API. Use `res_250` instead.
     pub small: Option<String>,
@@ -34,6 +37,7 @@ pub struct Thumbnail {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ImageType {
     /// The album cover, this is the front of the packaging of an audio recording (or in the
     /// case of a digital release the image associated with it in a digital media store).

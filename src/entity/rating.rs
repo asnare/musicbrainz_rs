@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Rating {
     pub vote_count: Option<u32>,
     pub value: Option<f32>,

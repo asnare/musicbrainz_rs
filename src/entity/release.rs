@@ -39,6 +39,7 @@ use crate::query::relations::impl_relations_includes;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Release {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -106,6 +107,7 @@ pub struct Release {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct ReleaseTextRepresentation {
     /// The language a release's track list is written in. The possible values are taken from the ISO
     /// 639-3 standard.
@@ -127,6 +129,7 @@ pub struct ReleaseTextRepresentation {
 ///     sed 's,<td>\([^<]*\)</td><td class="t"><a href="https://musicbrainz.org/search?query=script%3A%22\([^"]*\)%22,\/\/\/ \1\n\2\,,'
 /// ```
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleaseScript {
     /// Arabic
     Arab,
@@ -352,6 +355,7 @@ impl ReleaseScript {
 /// ```
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
 #[serde(rename_all = "lowercase")]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum Language {
     /// Abkhazian
     Abk,
@@ -1815,6 +1819,7 @@ impl Language {
     serde(rename_all(deserialize = "lowercase"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "lowercase"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleaseQuality {
     /// The release needs serious fixes, or its existence is hard to prove (but it's not clearly fake).
     Low,
@@ -1838,6 +1843,7 @@ pub enum ReleaseQuality {
 /// Variants are derived from the `release_status` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleaseStatus {
     /// Any release officially sanctioned by the artist and/or their record company. Most releases
     /// will fit into this category.
@@ -1866,6 +1872,7 @@ pub enum ReleaseStatus {
 /// Variants are derived from the `release_packaging` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ReleasePackaging {
     Book,
     Box,
@@ -1915,6 +1922,7 @@ pub enum ReleasePackaging {
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Media {
     pub discs: Option<Vec<Disc>>,
     pub title: Option<String>,
@@ -1935,6 +1943,7 @@ pub struct Media {
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Track {
     pub recording: Option<Recording>,
     pub title: String,
@@ -1946,6 +1955,7 @@ pub struct Track {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, QueryBuilder)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct ReleaseSearchQuery {
     /// (part of) any alias attached to the release group (diacritics are ignored)
     alias: String,

@@ -18,6 +18,7 @@ use std::fmt;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Place {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -52,6 +53,7 @@ pub struct Place {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Coordinates {
     pub latitude: Coordinate,
     pub longitude: Coordinate,
@@ -62,6 +64,7 @@ pub struct Coordinates {
 /// The MusicBrainz API either returns a string or a floating point number. This enum abstracts
 /// that so that the user does not have to care about this distinction.
 #[derive(Debug, PartialEq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum Coordinate {
     StringCoordinate(String),
     FloatCoordinate(f64),
@@ -116,6 +119,7 @@ impl From<f64> for Coordinate {
 /// Variants are derived from the `place_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum PlaceType {
     /// A place designed for non-live production of music, typically a recording studio.
     Studio,

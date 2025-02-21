@@ -27,6 +27,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(default)]
 pub struct Artist {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
@@ -115,6 +116,7 @@ pub struct Artist {
 /// Variants are derived from the `artist_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum ArtistType {
     /// This indicates a choir/chorus (an organized, usually large group of singers). Smaller
     /// vocal ensembles and groupings that do not generally call themselves choirs are better
@@ -149,6 +151,7 @@ pub enum ArtistType {
 /// Variants are derived from the `gender` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone, Default)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum Gender {
     Male,
     Female,

@@ -22,6 +22,7 @@ use lucene_query_builder::QueryBuilder;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Label {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -98,6 +99,7 @@ pub struct LabelSearchQuery {
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct LabelInfo {
     /// The catalog number of the release
     pub catalog_number: Option<String>,
@@ -112,6 +114,7 @@ pub struct LabelInfo {
 /// Variants are derived from the `label_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum LabelType {
     #[serde(rename = "Bootleg Production")]
     BootlegProduction,

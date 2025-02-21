@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 /// tracks and recordings, and how they are credited. They consist of artists, with (optionally)
 /// their names as credited in the specific release, track, etc., and join phrases between them.
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct ArtistCredit {
     pub name: String,
     pub joinphrase: Option<String>,

@@ -162,6 +162,7 @@ pub struct FetchQuery<T>(Query<T>);
 /// # }
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 struct CoverartQuery<T> {
     path: String,
     target: CoverartTarget,
@@ -169,6 +170,7 @@ struct CoverartQuery<T> {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct FetchCoverartQuery<T>(CoverartQuery<T>);
 
 /// Direct lookup of all the entities directly linked to another entity

@@ -21,6 +21,7 @@ use lucene_query_builder::QueryBuilder;
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Instrument {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
     pub id: String,
@@ -76,6 +77,7 @@ pub struct InstrumentSearchQuery {
 /// Variants are derived from the `instrument_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum InstrumentType {
     /// An aerophone, i.e. an instrument where the sound is created by vibrating air. The instrument
     /// itself does not vibrate.

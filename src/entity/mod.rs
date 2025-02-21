@@ -234,6 +234,7 @@ impl Path for Discid {
 
 /// A query parameter that allows adding requested data to the query
 #[derive(Debug, PartialEq, Clone)]
+//#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))] // Arbitrary doesn't like the `other` case as it is `'static`
 #[allow(unused)]
 pub(crate) enum Include {
     Subquery(Subquery),
@@ -254,6 +255,7 @@ impl Include {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[allow(unused)]
 pub(crate) enum Subquery {
     Urls,
@@ -310,6 +312,7 @@ impl Subquery {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[allow(unused)]
 pub(crate) enum Relationship {
     Area,
@@ -493,18 +496,21 @@ impl Browsable for Instrument {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct CoverartTarget {
     pub img_type: Option<CoverartType>,
     pub img_res: Option<CoverartResolution>,
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum CoverartResponse {
     Json(Coverart),
     Url(String),
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum CoverartType {
     Front,
     Back,
@@ -520,6 +526,7 @@ impl CoverartType {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum CoverartResolution {
     Res250,
     Res500,

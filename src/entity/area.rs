@@ -20,6 +20,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all(deserialize = "kebab-case"))
 )]
 #[cfg_attr(not(feature = "legacy_serialize"), serde(rename_all = "kebab-case"))]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(default)]
 pub struct Area {
     /// See [MusicBrainz Identifier](https://musicbrainz.org/doc/MusicBrainz_Identifier).
@@ -54,6 +55,7 @@ pub struct Area {
 /// Variants are derived from the `area_type` table in the MusicBrainz database.
 #[non_exhaustive]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub enum AreaType {
     /// Country is used for areas included (or previously included) in ISO 3166-1, e.g. United
     /// States.
@@ -93,6 +95,7 @@ pub enum AreaType {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, QueryBuilder)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct AreaSearchQuery {
     /// the area's MBID
     aid: String,
