@@ -22,7 +22,7 @@ async fn should_get_release_release_groups() {
 async fn should_get_release_media() {
     let justice_cross = Release::fetch()
         .id("4642ee19-7790-3c8d-ab5e-d133de942db6")
-        .with_recordings()
+        .with_media()
         .execute()
         .await
         .unwrap();
