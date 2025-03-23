@@ -35,7 +35,7 @@ async fn should_get_artist_by_id() {
             id: String::from("5b11f4ce-a62d-471e-81fc-a69a8278c7da"),
             name: String::from("Nirvana"),
             sort_name: String::from("Nirvana"),
-            disambiguation: String::from("1980s~1990s US grunge band"),
+            disambiguation: String::from("1980s\u{2013}1990s US grunge band"),
             artist_type: Some(Group),
             gender: None,
             country: Some("US".to_string()),
