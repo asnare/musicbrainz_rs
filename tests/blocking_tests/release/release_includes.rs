@@ -31,6 +31,25 @@ fn should_get_release_media() {
 }
 
 #[test]
+fn should_get_release_discids() {
+    let justice_cross = Release::fetch()
+        .id("4642ee19-7790-3c8d-ab5e-d133de942db6")
+        .with_discids()
+        .execute()
+        .unwrap();
+
+    let medias: Vec<Media> = justice_cross.media.unwrap();
+    let cd = medias.first().unwrap();
+
+    assert!(cd
+        .discs
+        .as_ref()
+        .unwrap()
+        .iter()
+        .any(|disc| disc.id == "TNLYkkUzaFr9BejILb6fsUaDjcg-"));
+}
+
+#[test]
 fn should_get_release_recordings() {
     let justice_cross = Release::fetch()
         .id("4642ee19-7790-3c8d-ab5e-d133de942db6")
