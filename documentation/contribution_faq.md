@@ -2,7 +2,7 @@
 
 ## Which branch should I PR onto?
 
-The project uses [gitflow](https://www.gitkraken.com/learn/git/git-flow) as a project management. In short, PR onto `develop`.
+The project uses a variation of [gitflow](https://www.gitkraken.com/learn/git/git-flow) as a project management. In short, the main development branch is `main`, and the released code is on `stable`.
 
 ## What commit mesage should I use?
 
