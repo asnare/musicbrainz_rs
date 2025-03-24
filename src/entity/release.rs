@@ -2082,7 +2082,9 @@ impl_includes!(
     (
         with_artist_credits,
         Include::Subquery(Subquery::ArtistCredits)
-    )
+    ),
+    (with_media, Include::Subquery(Subquery::Media)),
+    (with_discids, Include::Subquery(Subquery::DiscIds))
 );
 
 // Relationships includes
